@@ -7,14 +7,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Button, CardBody, CardHeader, CardText, Col, Row } from 'reactstrap'
 import { Link } from 'react-router-dom'
 
-const DashboardOrder = () => {
+const DashboardPackage = () => {
   const [collection, setCollection] = useState([])
   const [loading, setLoading] = useState(true)
-  const header = ['kode', 'jenis_marketing', 'jenis_pembayaran', 'tanggal']
+  const header = ['nama', 'harga']
 
   const fetchData = async () => {
     try {
-      const { status, payload } = await fetchapi('get', '/order')
+      const { status, payload } = await fetchapi('get', '/package')
       if (!status.success) {
         throw Error(status.message)
       }
@@ -38,14 +38,14 @@ const DashboardOrder = () => {
       <CardHeader>
         <Row className="my-0">
           <Col>
-            <CardText>Order</CardText>
+            <CardText>Package</CardText>
           </Col>
           <Col className="text-right">
             <Button
               color="primary"
               size="sm"
               tag={Link}
-              to="/dashboard/order/create"
+              to="/dashboard/package/create"
             >
               <FontAwesomeIcon icon={faPlus} className="mr-2" /> Add
             </Button>
@@ -53,10 +53,10 @@ const DashboardOrder = () => {
         </Row>
       </CardHeader>
       <CardBody className="text-center align-content-center">
-        <DataTable header={header} rawData={collection} url="order/" />
+        <DataTable header={header} rawData={collection} url="package/" />
       </CardBody>
     </LoadingCard>
   )
 }
 
-export default DashboardOrder
+export default DashboardPackage

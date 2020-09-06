@@ -20,24 +20,24 @@ import { fetchapi } from 'utils/api'
 import { useForm } from 'utils/hooks'
 import { LoadingCard } from 'components/layouts'
 
-const DashboardOrderEdit = () => {
+const DashboardBranchEdit = () => {
   const history = useHistory()
   const id = history.location.state?.id
   const [defaultValue, setDefaultValue] = useState({})
   const [loading, setLoading] = useState(true)
-  const order = useForm(defaultValue)
+  const branch = useForm(defaultValue)
   const fetchData = async (id = -1) => {
     try {
-      const { status, payload } = await fetchapi('get', `/order/${id}/edit`)
+      const { status, payload } = await fetchapi('get', `/branch/${id}/edit`)
       if (!status.success) {
-        history.push('/dashboard/order', {
+        history.push('/dashboard/branch', {
           message: status.message,
           status: 'error',
         })
       }
       return payload[0]
     } catch (error) {
-      history.push('/dashboard/order', {
+      history.push('/dashboard/branch', {
         message: error.message,
         status: 'error',
       })
@@ -47,14 +47,14 @@ const DashboardOrderEdit = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      const body = { ...defaultValue, ...order.value }
-      const { status } = await fetchapi('put', `/order/${id}`, body)
-      history.push('/dashboard/order', {
+      const body = { ...defaultValue, ...branch.value }
+      const { status } = await fetchapi('put', `/branch/${id}`, body)
+      history.push('/dashboard/branch', {
         message: status.message,
         status: status.success ? 'success' : 'error',
       })
     } catch (error) {
-      history.push('/dashboard/order', {
+      history.push('/dashboard/branch', {
         message: error.message,
         status: 'error',
       })
@@ -75,10 +75,15 @@ const DashboardOrderEdit = () => {
       <CardHeader>
         <Row>
           <Col>
-            <CardText>Edit Order</CardText>
+            <CardText>Edit Branch</CardText>
           </Col>
           <Col className="text-right">
-            <Button color="primary" size="sm" tag={Link} to="/dashboard/order">
+            <Button
+              color="primary"
+              size="sm"
+              tag={Link}
+              to="/dashboard/branch"
+            >
               <FontAwesomeIcon icon={faReply} className="mr-2" />
               Back
             </Button>
@@ -90,32 +95,22 @@ const DashboardOrderEdit = () => {
           <Col md="6">
             <Form onSubmit={handleSubmit}>
               <FormGroup>
-                <Label>Kode</Label>
+                <Label>Nama</Label>
                 <Input
                   type="text"
-                  name="kode"
-                  defaultValue={defaultValue.kode}
-                  onChange={order.changeHandler}
+                  name="nama"
+                  defaultValue={defaultValue.nama}
+                  onChange={branch.changeHandler}
                   required
                 />
               </FormGroup>
               <FormGroup>
-                <Label>Jenis Marketing</Label>
+                <Label>Alamat</Label>
                 <Input
-                  type="text"
-                  name="jenis_marketing"
-                  defaultValue={defaultValue.jenis_marketing}
-                  onChange={order.changeHandler}
-                  required
-                />
-              </FormGroup>
-              <FormGroup>
-                <Label>Jenis Pembayaran</Label>
-                <Input
-                  type="text"
-                  name="jenis_pembayaran"
-                  defaultValue={defaultValue.jenis_pembayaran}
-                  onChange={order.changeHandler}
+                  type="textarea"
+                  name="alamat"
+                  defaultValue={defaultValue.alamat}
+                  onChange={branch.changeHandler}
                   required
                 />
               </FormGroup>
@@ -135,4 +130,4 @@ const DashboardOrderEdit = () => {
   )
 }
 
-export default DashboardOrderEdit
+export default DashboardBranchEdit

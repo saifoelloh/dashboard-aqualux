@@ -12,8 +12,8 @@ export default () => {
     <Breadcrumb className="text-capitalize">
       {paths.map((path, id) => {
         const isActive = id === paths.length - 1
-        const url =
-          id === 0 ? `/${path}/` : `/${paths.splice(0, id).join('/')}/${path}`
+        const temp = [...paths].splice(0, id).join('/')
+        const url = id === 0 ? `/${path}/` : `/${temp}/${path}`
         return isActive ? (
           <BreadcrumbItem key={id} active={isActive}>
             {path}

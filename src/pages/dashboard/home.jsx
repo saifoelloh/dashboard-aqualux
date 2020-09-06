@@ -1,32 +1,33 @@
+import { fetchapi } from 'utils/api'
 import { DataTable } from 'components/molecules'
 import React, { useEffect, useState } from 'react'
 import { Card, CardBody, CardHeader } from 'reactstrap'
 
-import { fetchapi } from 'utils/api'
-
 const DashboardHome = () => {
   const [collection, setCollection] = useState([])
   const [loading, setLoading] = useState(true)
-  const header = ['title', 'type', 'episodes', 'score', 'members']
+  const header = ['nama', 'jabatan', 'telepon']
 
   const fetchData = async () => {
     try {
-      const { data } = await fetchapi('get', '/user')
-      console.log({ data })
-      return data
+      const { status, payload } = await fetchapi('get', '/order')
+      if (!status.success) {
+        throw Error(status.message)
+      }
+      return payload
     } catch (error) {
       throw error
     }
   }
 
   useEffect(() => {
-    if (collection.length === 0) {
+    if (loading) {
       fetchData()
         .then((resp) => setCollection(resp))
         .then(() => setLoading(!loading))
         .catch((error) => console.error({ error }))
     }
-  })
+  }, [loading])
 
   return (
     <Card>
@@ -35,7 +36,11 @@ const DashboardHome = () => {
         {loading ? (
           <h1>loading...</h1>
         ) : (
-          <DataTable header={header} data={collection} />
+          <DataTable
+            header={header}
+            rawData={collection}
+            url="/dashboard/admin/"
+          />
         )}
       </CardBody>
     </Card>

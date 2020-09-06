@@ -7,10 +7,9 @@ import {
 import _ from 'lodash'
 import React, { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import {
   Button,
-  ButtonGroup,
   Col,
   Input,
   InputGroup,
@@ -21,15 +20,49 @@ import {
   Row,
   Table,
 } from 'reactstrap'
+import swal from 'sweetalert'
 
-export default ({ data = [], header = [] }) => {
+import { fetchapi } from '../../utils/api/index.js'
+
+export default ({ header = [], rawData = [], url = '' }) => {
+  const finalURL = `/dashboard/${url}`
+  const history = useHistory()
   const [search, setSearch] = useState('')
   const [show, setShow] = useState(10)
   const [page, setPage] = useState(0)
-  const [items, setItems] = useState([...data])
-  const paginations = Array(Math.round(data.length / show)).fill(0)
+  const [items, setItems] = useState([...rawData])
+  const totalPages = Math.round(
+    rawData.length / show +
+      (rawData.length % 10 > 0 && rawData.length > 10 ? 1 : 0),
+  )
+  const paginations = Array(totalPages).fill(0)
   const sortedBy = (field = '') => {
-    setItems([..._.sortBy(data, [field])])
+    const temp = _.sortBy(rawData, [field])
+    setItems([...temp])
+  }
+
+  const removeData = async (id = -1) => {
+    try {
+      const { status } = await fetchapi('delete', `/${url + id}`)
+      history.go(finalURL, {
+        message: status.message,
+        status: status.success ? 'success' : 'error',
+      })
+    } catch (error) {
+      history.push(finalURL, {
+        message: error.message,
+        status: 'error',
+      })
+    }
+  }
+
+  const modalConfirmation = async (id = -1) => {
+    const confirm = await swal('Are you sure delete this data ?', {
+      buttons: ['no', 'yes'],
+    })
+    if (confirm) {
+      await removeData(id)
+    }
   }
 
   return (
@@ -48,7 +81,7 @@ export default ({ data = [], header = [] }) => {
         </Input>
       </Col>
       <Col>
-        <InputGroup className="w-50 ml-auto">
+        <InputGroup className="w-50 ml-auto" hidden={true}>
           <Input
             type="text"
             placeholder="seach..."
@@ -68,8 +101,12 @@ export default ({ data = [], header = [] }) => {
             <tr>
               <th>no</th>
               {header.map((headRow, index) => (
-                <th key={index} onClick={() => sortedBy(headRow)}>
-                  {headRow}
+                <th
+                  key={index}
+                  onClick={() => sortedBy(headRow)}
+                  style={{ cursor: 'pointer' }}
+                >
+                  {headRow.split('_').join(' ')}
                 </th>
               ))}
               <th>action</th>
@@ -77,29 +114,41 @@ export default ({ data = [], header = [] }) => {
           </thead>
           <tbody>
             {items
-              .filter(
-                (rowData, id) => id >= show * page && id < show * (page + 1),
-              )
-              .map((rowData, index) => (
+              .filter((row, id) => id >= show * page && id < show * (page + 1))
+              .map((row, index) => (
                 <tr key={index}>
                   <td>{show * page + (index + 1)}</td>
                   {header.map((fieldName, id) => (
-                    <td key={id}>{rowData[fieldName]}</td>
+                    <td key={id}>{row[fieldName]}</td>
                   ))}
                   <td>
-                    <ButtonGroup>
-                      <Link to={() => `/dashboard/admin/${index}`}>
-                        <Button size="sm" color="primary">
-                          <FontAwesomeIcon icon={faClipboardList} />
-                        </Button>
-                      </Link>
+                    <Link
+                      to={{
+                        pathname: `${finalURL}show`,
+                        state: { id: row['id'] },
+                      }}
+                    >
+                      <Button size="sm" color="primary">
+                        <FontAwesomeIcon icon={faClipboardList} />
+                      </Button>
+                    </Link>
+                    <Link
+                      to={{
+                        pathname: `${finalURL}edit`,
+                        state: { id: row['id'] },
+                      }}
+                    >
                       <Button size="sm" color="success">
                         <FontAwesomeIcon icon={faEdit} />
                       </Button>
-                      <Button size="sm" color="danger">
-                        <FontAwesomeIcon icon={faTrash} />
-                      </Button>
-                    </ButtonGroup>
+                    </Link>
+                    <Button
+                      size="sm"
+                      color="danger"
+                      onClick={() => modalConfirmation(row['id'])}
+                    >
+                      <FontAwesomeIcon icon={faTrash} />
+                    </Button>
                   </td>
                 </tr>
               ))}

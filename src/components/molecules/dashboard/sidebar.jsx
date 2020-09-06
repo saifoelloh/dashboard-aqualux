@@ -1,12 +1,15 @@
 import {
+  faBox,
   faHome,
+  faShippingFast,
   faShoppingBasket,
+  faSitemap,
   faUserSecret,
   faUsers,
 } from '@fortawesome/free-solid-svg-icons'
 import React from 'react'
 import { ListGroup } from 'reactstrap'
-import SidebarItem from 'components/atoms/sidebar-item.jsx'
+import SidebarItem from 'components/atoms/sidebar-item'
 
 export default () => {
   const menus = [
@@ -29,11 +32,33 @@ export default () => {
       name: 'order',
       icon: faShoppingBasket,
       url: '/dashboard/order',
+      childs: [
+        {
+          name: 'list order',
+          icon: faShoppingBasket,
+          url: '/dashboard/order',
+        },
+        {
+          name: 'branch',
+          icon: faSitemap,
+          url: '/dashboard/branch',
+        },
+        {
+          name: 'package',
+          icon: faBox,
+          url: '/dashboard/package',
+        },
+      ],
+    },
+    {
+      name: 'shipping',
+      icon: faShippingFast,
+      url: '/dashboard/shipping',
     },
   ]
 
   return (
-    <ListGroup className="h-100 rounded-0 bg-info">
+    <ListGroup className="h-100 rounded-0">
       {menus.map((menu, id) => (
         <SidebarItem key={id} menu={menu} />
       ))}

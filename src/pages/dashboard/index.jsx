@@ -1,11 +1,13 @@
-import React from 'react'
-import { Card, Col, Container, Row } from 'reactstrap'
-
-import DashboardRoute from './routes'
 import {
   DashboardBreadcrumbs,
   DashboardSidebar,
 } from 'components/molecules/dashboard'
+import { faHeart } from '@fortawesome/free-solid-svg-icons'
+import React from 'react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { Card, Col, Container, Row } from 'reactstrap'
+
+import DashboardRoute from './routes'
 
 const Dashboard = () => {
   return (
@@ -16,19 +18,26 @@ const Dashboard = () => {
         </Card>
       </Col>
       <Col md="10" className="h-100 p-0">
-        <Container fluid className="h-100 py-2 overflow-auto">
-          <Row className="h-100 m-0">
-            <Col xs="12">
+        <Row className="h-100 m-0">
+          <Col xs="12">
+            <Container fluid className="h-100 py-2 overflow-auto">
               <DashboardBreadcrumbs />
               <DashboardRoute />
-            </Col>
-            <Col xs="12" className="align-self-end">
-              <div className="position-fixed-bottom">
-                <h2>footer</h2>
-              </div>
-            </Col>
-          </Row>
-        </Container>
+            </Container>
+          </Col>
+          <Col xs="12" className="align-self-end py-3">
+            <Container fluid className="position-fixed-bottom">
+              Created with <FontAwesomeIcon icon={faHeart} color="red" /> by
+              <a
+                href="https://saifoelloh.netlifyapp.com"
+                className="text-decoration-none mx-1"
+                target="__blank"
+              >
+                Kreativisia
+              </a>
+            </Container>
+          </Col>
+        </Row>
       </Col>
     </Row>
   )

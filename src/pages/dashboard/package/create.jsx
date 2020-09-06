@@ -20,20 +20,21 @@ import {
 import { fetchapi } from 'utils/api'
 import { useForm } from 'utils/hooks'
 
-const DashboardAdminCreate = () => {
-  const user = useForm({})
+const DashboardPackageCreate = () => {
+  const paket = useForm({})
   const history = useHistory()
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      const { status } = await fetchapi('post', '/user', { ...user.value })
-      history.push('/dashboard/admin', {
+      const { status } = await fetchapi('post', '/package', {
+        ...paket.value,
+      })
+      history.push('/dashboard/package', {
         message: status.message,
         status: status.success ? 'success' : 'error',
       })
     } catch (error) {
-      console.log(error)
-      history.push('/dashboard/admin', {
+      history.push('/dashboard/package', {
         message: error.message,
         status: 'error',
       })
@@ -44,10 +45,15 @@ const DashboardAdminCreate = () => {
       <CardHeader>
         <Row>
           <Col>
-            <CardText>Add Admin</CardText>
+            <CardText>Add Package</CardText>
           </Col>
           <Col className="text-right">
-            <Button color="primary" size="sm" tag={Link} to="/dashboard/admin">
+            <Button
+              color="primary"
+              size="sm"
+              tag={Link}
+              to="/dashboard/package"
+            >
               <FontAwesomeIcon icon={faReply} className="mr-2" />
               Back
             </Button>
@@ -59,47 +65,20 @@ const DashboardAdminCreate = () => {
           <Col md="6">
             <Form onSubmit={handleSubmit}>
               <FormGroup>
-                <Label>Name</Label>
+                <Label>Nama</Label>
                 <Input
                   type="text"
                   name="nama"
-                  onChange={user.changeHandler}
+                  onChange={paket.changeHandler}
                   required
                 />
               </FormGroup>
               <FormGroup>
-                <Label>Email</Label>
+                <Label>Harga</Label>
                 <Input
-                  type="email"
-                  name="email"
-                  onChange={user.changeHandler}
-                  required
-                />
-              </FormGroup>
-              <FormGroup>
-                <Label>Phone</Label>
-                <Input
-                  type="text"
-                  name="telepon"
-                  onChange={user.changeHandler}
-                  required
-                />
-              </FormGroup>
-              <FormGroup>
-                <Label>Position</Label>
-                <Input
-                  type="text"
-                  name="jabatan"
-                  onChange={user.changeHandler}
-                  required
-                />
-              </FormGroup>
-              <FormGroup>
-                <Label>Address</Label>
-                <Input
-                  type="textarea"
-                  name="alamat"
-                  onChange={user.changeHandler}
+                  type="number"
+                  name="harga"
+                  onChange={paket.changeHandler}
                   required
                 />
               </FormGroup>
@@ -119,4 +98,4 @@ const DashboardAdminCreate = () => {
   )
 }
 
-export default DashboardAdminCreate
+export default DashboardPackageCreate
