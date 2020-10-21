@@ -1,3 +1,3 @@
-import DataTable from './data-table'
+import DataTable from './data-table/index'
 
 export { DataTable }

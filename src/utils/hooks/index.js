@@ -1,3 +1,4 @@
+import useConfirmation from './confirmation'
 import useForm from './form'
 
-export { useForm }
+export { useConfirmation, useForm }

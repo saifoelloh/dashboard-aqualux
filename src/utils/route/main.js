@@ -1,9 +1,9 @@
 import React from 'react'
 import { Route, Switch } from 'react-router-dom'
 
-import { Login } from 'pages/auth'
-import Dashboard from 'pages/dashboard/index'
-import { NotFound } from 'pages/error'
+import { Login } from 'components/pages/auth'
+import Dashboard from 'components/pages/dashboard/index'
+import { NotFound } from 'components/pages/error'
 import PrivateRoute from './private-route'
 
 const MainRoutes = () => {

@@ -1,13 +1,15 @@
 import PropsTypes from 'prop-types'
 import React, { createContext, useReducer } from 'react'
 
+const sessionAuth = sessionStorage.getItem('auth')
+const sessionState = sessionAuth !== null ? JSON.parse(sessionAuth) : {}
 const initialState = {
-  username: '',
+  nama: '',
+  jabatan: '',
   email: '',
-  token: '',
-  role: '',
-  expire: 0,
-  isAuthenticate: false,
+  isAuthenticate: true,
+  isUwu: true,
+  ...sessionState,
 }
 
 const intialAction = {
@@ -19,7 +21,6 @@ const authReducer = (state = initialState, action = intialAction) => {
   switch (action.type) {
     case 'LOGIN':
       return {
-        ...state,
         ...action.payload,
         isAuthenticate: true,
       }

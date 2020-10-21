@@ -48,12 +48,12 @@ export default () => {
           icon: faBox,
           url: '/dashboard/package',
         },
+        {
+          name: 'shipping',
+          icon: faShippingFast,
+          url: '/dashboard/shipping',
+        },
       ],
-    },
-    {
-      name: 'shipping',
-      icon: faShippingFast,
-      url: '/dashboard/shipping',
     },
   ]
 
